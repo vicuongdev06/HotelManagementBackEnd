@@ -105,5 +105,9 @@ namespace HotelManagementBackEnd.Repository
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await _userRepository.GetUserByUsernameAsync(username);
+        }
     }
 }

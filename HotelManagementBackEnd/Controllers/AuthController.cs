@@ -2,6 +2,7 @@
 using HotelManagementBackEnd.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using HotelManagementBackEnd.Constants;
 
 namespace HotelManagementBackEnd.Controllers
 {
@@ -23,11 +24,34 @@ namespace HotelManagementBackEnd.Controllers
 
             if (string.IsNullOrEmpty(token))
             {
-                return Unauthorized(new { message = "Invalid credentials" }); 
+                return Unauthorized(new { message = "Invalid credentials" });
             }
 
-            return Ok(new { Token = token, Message = "Login successful" });
+            var user = await _authRepository.GetUserByUsernameAsync(loginRequest.Username);
+
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found" });
+            }
+
+            var userInfo = new
+            {
+                user.Id,
+                user.Username,
+                user.Email,
+                user.FirstName,
+                user.LastName,
+                user.Role
+            };
+
+            return Ok(new
+            {
+                Message = "Login successful",
+                Token = token,
+                User = userInfo
+            });
         }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
@@ -39,7 +63,27 @@ namespace HotelManagementBackEnd.Controllers
                 return BadRequest(new { message = response.Message });
             }
 
-            return Ok(response);
+            var user = await _authRepository.GetUserByUsernameAsync(registerRequest.Username);
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "Error occurred while fetching user data." });
+            }
+
+            return Ok(new
+            {
+                Message = response.Message,
+                User = new
+                {
+                    user.Id, 
+                    user.Username,
+                    user.Email,
+                    user.FirstName,
+                    user.LastName,
+                    user.Role
+                }
+            });
         }
+
     }
 }

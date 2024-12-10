@@ -1,4 +1,5 @@
-﻿using HotelManagementBackEnd.Models.Auth;
+﻿using HotelManagementBackEnd.Data;
+using HotelManagementBackEnd.Models.Auth;
 
 namespace HotelManagementBackEnd.Interface
 {
@@ -6,5 +7,7 @@ namespace HotelManagementBackEnd.Interface
     {
         Task<string> LoginAsync(string username, string password);
         Task<RegisterResponse> RegisterUserAsync(RegisterRequest request);
+        Task<User> GetUserByUsernameAsync(string username);
+
     }
 }
