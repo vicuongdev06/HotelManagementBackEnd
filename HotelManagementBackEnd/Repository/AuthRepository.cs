@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using HotelManagementBackEnd.Constants;
 
 namespace HotelManagementBackEnd.Repository
 {
@@ -46,7 +47,7 @@ namespace HotelManagementBackEnd.Repository
                 PhoneNumber = request.PhoneNumber,
                 Address = request.Address,
                 AvatarUrl = request.AvatarUrl,
-                Role = "Customer",
+                Role = RoleConstants.Customer, 
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

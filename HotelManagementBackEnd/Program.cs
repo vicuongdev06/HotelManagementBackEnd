@@ -1,4 +1,5 @@
-﻿using HotelManagementBackEnd.Data;
+﻿using HotelManagementBackEnd.Constants;
+using HotelManagementBackEnd.Data;
 using HotelManagementBackEnd.Interface;
 using HotelManagementBackEnd.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,9 +18,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>(); 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole(RoleConstants.Admin));
+    options.AddPolicy("StaffOrAdmin", policy =>
+        policy.RequireRole(RoleConstants.Admin, RoleConstants.Staff));
+});
 
-
-// Đăng ký Authentication (JWT)
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
