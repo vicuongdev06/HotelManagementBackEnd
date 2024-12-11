@@ -15,6 +15,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+//Pattern Services
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IUserRepository, UserRepository>(); 
