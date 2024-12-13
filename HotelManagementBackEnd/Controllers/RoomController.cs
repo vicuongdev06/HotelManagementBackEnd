@@ -75,5 +75,40 @@ namespace HotelManagementBackEnd.Controllers
             if (!deleted) return NotFound();
             return NoContent();
         }
+
+        [HttpGet("GetRoomsByStatus/{isAvailable}")]
+        public async Task<IActionResult> GetRoomsByStatus(int isAvailable)
+        {
+            if (isAvailable != 0 && isAvailable != 1)
+            {
+                return BadRequest("isAvailable must be 0 (false) or 1 (true).");
+            }
+
+            bool status = isAvailable == 1;
+
+            var rooms = await _roomRepository.GetRoomsByStatusAsync(status);
+            return Ok(rooms);
+        }
+
+        [HttpPut("UpdateRoomStatus/{id}")]
+        public async Task<IActionResult> UpdateRoomStatus(int id, [FromBody] UpdateRoomStatusRequest request)
+        {
+            if (request.IsAvailable != 0 && request.IsAvailable != 1)
+            {
+                return BadRequest("Trạng thái không khả dụng");
+            }
+            bool status = request.IsAvailable == 1;
+            var updatedRoom = await _roomRepository.UpdateRoomStatusAsync(id, status);
+            if (updatedRoom == null)
+            {
+                return NotFound($"Phòng {id} không được tìm thấy");
+            }
+            return Ok(updatedRoom);
+        }
+
+        public class UpdateRoomStatusRequest
+        {
+            public int IsAvailable { get; set; }
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace HotelManagementBackEnd.Interface
         Task<Room> CreateRoomAsync(Room room);
         Task<Room> UpdateRoomAsync(Room room);
         Task<bool> DeleteRoomAsync(int id);
+        Task<IEnumerable<Room>> GetRoomsByStatusAsync(bool isAvailable);
+        Task<Room> UpdateRoomStatusAsync(int id, bool isAvailable);
     }
 }

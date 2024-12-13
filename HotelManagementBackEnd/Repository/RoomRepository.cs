@@ -60,5 +60,26 @@ namespace HotelManagementBackEnd.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<IEnumerable<Room>> GetRoomsByStatusAsync(bool isAvailable)
+        {
+            return await _context.Rooms
+                .Where(room => room.IsAvailable == isAvailable)
+                .ToListAsync();
+        }
+
+        public async Task<Room>UpdateRoomStatusAsync(int id, bool isAvailable)
+        {
+            var room = await _context.Rooms.FindAsync(id);
+            if (room == null)
+            {
+                return null;
+            }
+            room.IsAvailable = isAvailable;
+            room.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return room;
+        }
     }
 }
