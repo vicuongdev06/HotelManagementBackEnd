@@ -109,5 +109,18 @@ namespace HotelManagementBackEnd.Repository
         {
             return await _userRepository.GetUserByUsernameAsync(username);
         }
-    }
+
+		public async Task<User> ResetPasswordAsync(ResetPasswordRequest req)
+		{
+			var user = await _userRepository.GetUserByEmailAsync(req.Email);
+            if (user == null) 
+            {
+                return null;
+            }
+			user.PasswordHash = _passwordHasher.HashPassword(user, req.NewPassword);
+			await _userRepository.SaveChangesAsync();
+
+            return await _userRepository.GetUserByIdAsync(user.Id);
+		}
+	}
 }

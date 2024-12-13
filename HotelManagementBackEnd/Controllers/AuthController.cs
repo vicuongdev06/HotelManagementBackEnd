@@ -85,5 +85,17 @@ namespace HotelManagementBackEnd.Controllers
             });
         }
 
+        [HttpPost("resetPassword")]
+        public async Task<ActionResult<ResetPasswordResponse>> ResetPassword(ResetPasswordRequest req)
+        {
+            var user = await _authRepository.ResetPasswordAsync(req);
+            if (user == null)
+            {
+                return BadRequest("Không tìm thấy email!");
+            }
+            var res = new ResetPasswordResponse { message = "Đổi mật khẩu thành công" };
+            return Ok(res);
+        }
+
     }
 }

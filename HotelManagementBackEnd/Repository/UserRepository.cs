@@ -27,5 +27,15 @@ namespace HotelManagementBackEnd.Repository
         {
             await _context.SaveChangesAsync();
         }
-    }
+
+		public Task<User?> GetUserByEmailAsync(string email)
+		{
+			return _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+		}
+
+		public async Task<User?> GetUserByIdAsync(int id)
+		{
+            return await _context.Users.FindAsync(id);
+		}
+	}
 }
