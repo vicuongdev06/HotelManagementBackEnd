@@ -67,6 +67,13 @@ namespace HotelManagementBackEnd.Repository
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Room>> GetByBookingStatus(bool isBooked)
+        {
+            return await _context.Rooms
+                .Where(room => room.IsBooked == isBooked)
+                .ToListAsync();
+        }
+
         public async Task<Room>UpdateRoomStatusAsync(int id, bool isAvailable)
         {
             var room = await _context.Rooms.FindAsync(id);

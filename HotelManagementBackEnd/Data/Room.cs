@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 public class Room
 {
@@ -24,9 +25,13 @@ public class Room
     public string Images { get; set; }
 
     public bool IsAvailable { get; set; } = true;
+    public bool IsBooked { get; set; }    
 
     [Required]
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+    [JsonIgnore]
+    public ICollection<Booking> Bookings { get; set; }
+
 }

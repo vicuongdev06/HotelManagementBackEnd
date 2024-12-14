@@ -17,6 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //Pattern Services
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddEndpointsApiExplorer();
