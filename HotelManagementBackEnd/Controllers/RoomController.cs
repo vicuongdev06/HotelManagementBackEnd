@@ -81,10 +81,24 @@ namespace HotelManagementBackEnd.Controllers
         {
             if (isAvailable != 0 && isAvailable != 1)
             {
-                return BadRequest("isAvailable must be 0 (false) or 1 (true).");
+                return BadRequest("\"Error status");
             }
 
             bool status = isAvailable == 1;
+
+            var rooms = await _roomRepository.GetRoomsByStatusAsync(status);
+            return Ok(rooms);
+        }
+
+        [HttpGet("GetByBookingStatus/{isBooked}")]
+        public async Task<IActionResult> GetByBookingStatus(int isBooked)
+        {
+            if (isBooked != 0 && isBooked != 1)
+            {
+                return BadRequest("Error status");
+            }
+
+            bool status = isBooked == 1;
 
             var rooms = await _roomRepository.GetRoomsByStatusAsync(status);
             return Ok(rooms);
