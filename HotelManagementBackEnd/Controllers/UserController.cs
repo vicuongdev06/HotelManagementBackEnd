@@ -3,6 +3,8 @@ using HotelManagementBackEnd.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HotelManagementBackEnd.Data;
+using System.Security.Claims;
+using HotelManagementBackEnd.Models.User;
 
 namespace HotelManagementBackEnd.Controllers
 {
@@ -17,16 +19,16 @@ namespace HotelManagementBackEnd.Controllers
         {
             _userRepository = userRepository;
         }
-
+        
         [HttpGet("profile")]
-        public async Task<IActionResult> GetProfile()
+        public async Task<ActionResult<UserResponse>> GetProfile()
         {
-            var userId = int.Parse(User.Identity.Name); 
-            var user = await _userRepository.GetUserByUsernameAsync(userId.ToString()); 
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
+            var user = await _userRepository.GetUserByIdAsync(int.Parse(userId)); 
 
             if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return Unauthorized(new { message = "Không tìm thấy tài khoản" });
             }
 
             return Ok(user);
@@ -35,12 +37,12 @@ namespace HotelManagementBackEnd.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateProfile([FromBody] User updateUser)
         {
-            var userId = int.Parse(User.Identity.Name);
-            var user = await _userRepository.GetUserByUsernameAsync(userId.ToString());
+			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			var user = await _userRepository.GetUserByIdAsync(int.Parse(userId));
 
-            if (user == null)
+			if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return Unauthorized(new { message = "Không tìm thấy tài khoản" });
             }
 
             user.FirstName = updateUser.FirstName;
